@@ -1,0 +1,29 @@
+services:
+  app:
+    build:
+      context: ./app
+    environment:
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: app
+      PGPORT: 5432
+      PGHOST: db
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    volumes:
+      - ./app:/srv/www
+      - /srv/www/app/assets/node_modules
+  db:
+    image: postgres:15.3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
